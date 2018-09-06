@@ -1,6 +1,6 @@
 
 (require 'poly-rst)
-(require 'polymode-test)
+(require 'polymode-test-utils)
 
 (ert-deftest poly-rst/spans-at-borders ()
   (pm-test-run-on-file poly-rst-mode "code-blocks.rst"
