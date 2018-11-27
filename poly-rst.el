@@ -54,7 +54,7 @@
 (defcustom pm-host/rst
   (pm-host-chunkmode :name "rst"
                      :mode 'rst-mode)
-  "ReSTructued text hostmode."
+  "ReSTructured text hostmode."
   :group 'poly-hostmodes
   :type 'object)
 
