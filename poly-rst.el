@@ -44,7 +44,10 @@
   "Regexp to match start of the header.")
 
 (defun poly-rst-head-matcher (ahead)
-  "ReST heads end with an empty line."
+  "ReST heads end with an empty line.
+
+Find the ReST header that are AHEAD or -AHEAD number of headers
+away from the current location."
   (when (re-search-forward poly-rst-head-start-regexp nil t ahead)
     (cons (match-beginning 0)
           (if (re-search-forward "^[ \t]*\n" nil t)
