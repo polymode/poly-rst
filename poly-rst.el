@@ -82,8 +82,8 @@ away from the current location."
   :hostmode 'pm-host/rst
   :innermodes '(pm-inner/rst))
 
- ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.rst$" . poly-rst-mode))
+;;;###autoload
+(add-to-list 'auto-mode-alist '("\\.rst\\'" . poly-rst-mode))
 
 (provide 'poly-rst)
 ;;; poly-rst.el ends here
