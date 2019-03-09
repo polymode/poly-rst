@@ -49,7 +49,6 @@
 
 (defun poly-rst-head-matcher (ahead)
   "ReST heads end with an empty line.
-
 Find the ReST header that are AHEAD or -AHEAD number of headers
 away from the current location."
   (when (re-search-forward poly-rst-head-start-regexp nil t ahead)
@@ -77,7 +76,7 @@ away from the current location."
   :group 'poly-innermodes
   :type 'object)
 
-;;;###autoload (autoload #'poly-rst-mode "poly-python")
+;;;###autoload (autoload #'poly-rst-mode "poly-rst")
 (define-polymode poly-rst-mode
   :hostmode 'pm-host/rst
   :innermodes '(pm-inner/rst))
