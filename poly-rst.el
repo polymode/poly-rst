@@ -41,6 +41,9 @@
 (require 'polymode)
 (require 'rst)
 
+(define-obsolete-variable-alias 'pm-host/rst 'poly-rst-hostmode "v0.2")
+(define-obsolete-variable-alias 'pm-inner/rst 'poly-rst-innermode "v0.2")
+
 (defvar poly-rst-code-tags '("code" "code-block" "sourcecode" "highlight")
   "List of rst code block tags.")
 
@@ -57,29 +60,23 @@ away from the current location."
               (match-end 0)
             (point-max)))))
 
-(defcustom pm-host/rst
-  (pm-host-chunkmode :name "rst"
-                     :mode 'rst-mode)
+(define-hostmode poly-rst-hostmode nil
   "ReSTructured text hostmode."
-  :group 'poly-hostmodes
-  :type 'object)
+  :mode 'rst-mode)
 
-(defcustom pm-inner/rst
-  (pm-inner-auto-chunkmode :name "rst-code-block"
-                           :head-matcher #'poly-rst-head-matcher
-                           :tail-matcher #'pm-same-indent-tail-matcher
-                           :mode 'host
-                           :head-mode 'host
-                           :indent-offset 4
-                           :mode-matcher (cons "\.\. .*:: +\\(.+\\)" 1))
+(define-auto-innermode poly-rst-innermode nil
   "ReSTructured text innermode."
-  :group 'poly-innermodes
-  :type 'object)
+  :head-matcher #'poly-rst-head-matcher
+  :tail-matcher #'pm-same-indent-tail-matcher
+  :mode 'host
+  :head-mode 'host
+  :indent-offset 4
+  :mode-matcher (cons "\.\. .*:: +\\(.+\\)" 1))
 
 ;;;###autoload (autoload #'poly-rst-mode "poly-rst")
 (define-polymode poly-rst-mode
-  :hostmode 'pm-host/rst
-  :innermodes '(pm-inner/rst))
+  :hostmode 'poly-rst-hostmode
+  :innermodes '(poly-rst-innermode))
 
 ;;;###autoload
 (add-to-list 'auto-mode-alist '("\\.rst\\'" . poly-rst-mode))
