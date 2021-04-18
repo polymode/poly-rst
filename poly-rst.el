@@ -79,7 +79,7 @@ away from the current location."
   :innermodes '(poly-rst-innermode))
 
 ;;;###autoload
-(add-to-list 'auto-mode-alist '("\\.rst\\'" . poly-rst-mode))
+(add-to-list 'auto-mode-alist '("\\.re?st\\'" . poly-rst-mode))
 
 (provide 'poly-rst)
 ;;; poly-rst.el ends here
