@@ -50,6 +50,37 @@
 (defvar poly-rst-head-start-regexp (format "\.\. +%s::[^:]" (regexp-opt poly-rst-code-tags))
   "Regexp to match start of the header.")
 
+(defvar poly-rst-code-lang-regexp "\.\. .*:: +\\(.+\\)"
+  "Regexp to match program languages from the start of the header.")
+
+;; This is based on `markdown-code-lang-modes' from markdown-mode.el
+(defcustom poly-rst-code-lang-modes
+  '(("ocaml" . tuareg-mode) ("elisp" . emacs-lisp-mode) ("ditaa" . artist-mode)
+    ("asymptote" . asy-mode) ("dot" . fundamental-mode) ("sqlite" . sql-mode)
+    ("calc" . fundamental-mode) ("C" . c-mode) ("cpp" . c++-mode)
+    ("C++" . c++-mode) ("screen" . shell-script-mode) ("shell" . sh-mode)
+    ("bash" . sh-mode))
+  "Alist mapping languages to their major mode.
+The key is the language name, the value is the major mode.
+This mapping is useful to map programming language whose major mode name
+is not directly related to the language name. For example, the major mode
+for OCaml is `tuareg-mode'."
+  :group 'poply-rst
+  :type '(repeat
+          (cons
+           (string "Language name")
+           (symbol "Major mode"))))
+
+(defun poly-rst-get-lang-mode (lang)
+  "Return major mode that should be used for LANG.
+LANG is a string, and the returned major mode is a symbol."
+  (cl-find-if
+   'fboundp
+   (list (cdr (assoc lang poly-rst-code-lang-modes))
+         (cdr (assoc (downcase lang) poly-rst-code-lang-modes))
+         (intern (concat lang "-mode"))
+         (intern (concat (downcase lang) "-mode")))))
+
 (defun poly-rst-head-matcher (ahead)
   "ReST heads end with an empty line.
 Find the ReST header that are AHEAD or -AHEAD number of headers
@@ -59,6 +90,12 @@ away from the current location."
           (if (re-search-forward "^[ \t]*\n" nil t)
               (match-end 0)
             (point-max)))))
+
+(defun poly-rst-mode-matcher ()
+  (when (re-search-forward poly-rst-code-lang-regexp nil t 1)
+    (let* ((lang (buffer-substring (match-beginning 1) (match-end 1)))
+           (mode (poly-rst-get-lang-mode lang)))
+      mode)))
 
 (define-hostmode poly-rst-hostmode nil
   "ReSTructured text hostmode."
@@ -71,7 +108,7 @@ away from the current location."
   :mode 'host
   :head-mode 'host
   :indent-offset 4
-  :mode-matcher (cons "\.\. .*:: +\\(.+\\)" 1))
+  :mode-matcher #'poly-rst-mode-matcher)
 
 ;;;###autoload (autoload #'poly-rst-mode "poly-rst")
 (define-polymode poly-rst-mode
