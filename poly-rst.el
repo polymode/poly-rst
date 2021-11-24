@@ -87,9 +87,11 @@ Find the ReST header that are AHEAD or -AHEAD number of headers
 away from the current location."
   (when (re-search-forward poly-rst-head-start-regexp nil t ahead)
     (cons (match-beginning 0)
-          (if (re-search-forward "^[ \t]*\n" nil t)
-              (match-end 0)
-            (point-max)))))
+          (match-end 0)
+          ;; (if (re-search-forward "^[ \t]*\n" nil t)
+          ;;     (match-end 0)
+          ;;   (point-max))
+          )))
 
 (defun poly-rst-mode-matcher ()
   (when (re-search-forward poly-rst-code-lang-regexp nil t 1)
